@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const SignUp =() => {
-    
+    const navigate=useNavigate();
 const [messageSuccessful,setMessageSuccessful]=useState(false);
 const[wrongPassword,setWrongPassword]=useState(false);
 const[databaseError,setDatabaseError]=useState("");
@@ -76,27 +79,33 @@ const handleSubmit = async (e) => {
         fullName: `${formData.name} ${formData.lastName}`,
         email: formData.email,
         password: formData.password,
-        password_confirmation: formData.confirmPassword, // ✅ REQUIRED
-        role: formData.role, // must be Student | Instructor | SuperAdmin
+        password_confirmation: formData.confirmPassword, 
+        role: formData.role,
       }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      setDatabaseError(Object.values(data.errors).flat().join("\n\n")); // ✅ show error
-    
+      setDatabaseError(Object.values(data.errors).flat().join("\n"));
+      return; // stop execution if error
     }
-setDatabaseError("");
+
+    // success
+    setDatabaseError("");
     setWrongPassword(false);
     setWrongPasswordBorder("#e0e0e0");
     setMessageSuccessful(true);
     setTimeout(() => setMessageSuccessful(false), 3000);
+    
+    // redirect after signup if needed
+    // navigate("/login");
+
   } catch (error) {
     console.error("Signup error:", error);
+    setDatabaseError("Network error: " + error.message);
   }
 };
-
   return (
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
@@ -170,14 +179,14 @@ setDatabaseError("");
 
 {messageSuccessful &&  <p style={styles.successText}>  Successfully registered as a {formData.role}</p>}
 <p style={styles.errorText}>{databaseError}</p>
-
+ <h3 style={{ textAlign: "center", fontSize: "14px" }}>
+          Already have an account? <Link to="/">Login</Link>
+        </h3>
       </form>
      
     </div>
   );
 };
-
-
 
 const styles = {
   container: {
