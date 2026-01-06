@@ -1,22 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import './index.css';
-import SignUp from './component/Authentication/SignUp';
-import Login from './component/Authentication/Login';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// ================= Routing Component =================
-const Routing = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
+import SplashScreen from "./component/Splash/SplashScreen";
+import SignUp from "./component/Authentication/SignUp";
+import Login from "./component/Authentication/Login";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Routing />);
+
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SplashScreen />} />
+        <Route path="/Login" element={<Login/>}/>
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+reportWebVitals();

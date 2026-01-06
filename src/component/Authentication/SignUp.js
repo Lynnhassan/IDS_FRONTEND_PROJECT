@@ -15,7 +15,7 @@ const[wrongPasswordBorder,setWrongPasswordBorder]=useState("#e0e0e0");
     email: "",
     password: "",
     confirmPassword: "",
-    role: "student",
+    role: "Student", // capital S mesh small s
   });
 const handleChange = (e) => {
   const { name, value } = e.target;
@@ -86,13 +86,24 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      setDatabaseError(Object.values(data.errors).flat().join("\n"));
-      return; // stop execution if error
-    }
 
-    // success
-    setDatabaseError("");
+
+   /* if (!response.ok) {
+      setDatabaseError(Object.values(data.errors).flat().join("\n\n")); // ✅ show error
+    
+    }*/
+
+      if (!response.ok) {
+  const msg =
+    data?.message ||
+    (data?.errors ? Object.values(data.errors).flat().join("\n") : "Signup failed");
+  setDatabaseError(msg);
+  return; // IMPORTANT: stop here
+}
+
+
+
+setDatabaseError("");
     setWrongPassword(false);
     setWrongPasswordBorder("#e0e0e0");
     setMessageSuccessful(true);
@@ -180,7 +191,7 @@ const handleSubmit = async (e) => {
 {messageSuccessful &&  <p style={styles.successText}>  Successfully registered as a {formData.role}</p>}
 <p style={styles.errorText}>{databaseError}</p>
  <h3 style={{ textAlign: "center", fontSize: "14px" }}>
-          Already have an account? <Link to="/">Login</Link>
+          Already have an account? <Link to="/Login">Login</Link>
         </h3>
       </form>
      
