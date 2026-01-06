@@ -12,7 +12,7 @@ const[wrongPasswordBorder,setWrongPasswordBorder]=useState("#e0e0e0");
     email: "",
     password: "",
     confirmPassword: "",
-    role: "student",
+    role: "Student", // capital S mesh small s
   });
 const handleChange = (e) => {
   const { name, value } = e.target;
@@ -83,10 +83,23 @@ const handleSubmit = async (e) => {
 
     const data = await response.json();
 
-    if (!response.ok) {
+
+
+   /* if (!response.ok) {
       setDatabaseError(Object.values(data.errors).flat().join("\n\n")); // ✅ show error
     
-    }
+    }*/
+
+      if (!response.ok) {
+  const msg =
+    data?.message ||
+    (data?.errors ? Object.values(data.errors).flat().join("\n") : "Signup failed");
+  setDatabaseError(msg);
+  return; // IMPORTANT: stop here
+}
+
+
+
 setDatabaseError("");
     setWrongPassword(false);
     setWrongPasswordBorder("#e0e0e0");
