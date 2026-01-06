@@ -191,7 +191,7 @@ setDatabaseError("");
 {messageSuccessful &&  <p style={styles.successText}>  Successfully registered as a {formData.role}</p>}
 <p style={styles.errorText}>{databaseError}</p>
  <h3 style={{ textAlign: "center", fontSize: "14px" }}>
-          Already have an account? <Link to="/">Login</Link>
+          Already have an account? <Link to="/Login">Login</Link>
         </h3>
       </form>
      

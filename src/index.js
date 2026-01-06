@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 
 import SplashScreen from "./component/Splash/SplashScreen";
 import SignUp from "./component/Authentication/SignUp";
+import Login from "./component/Authentication/Login";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,6 +16,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SplashScreen />} />
+        <Route path="/Login" element={<Login/>}/>
         <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>

@@ -95,7 +95,7 @@ const Login = () => {
         {loginSuccess && <p style={styles.successText}>Successfully logged in</p>}
 
         <h3 style={{ textAlign: "center", fontSize: "14px" }}>
-          Don’t have an account? <Link to="/">Sign Up</Link>
+          Don’t have an account? <Link to="/Signup">Sign Up</Link>
         </h3>
       </form>
     </div>

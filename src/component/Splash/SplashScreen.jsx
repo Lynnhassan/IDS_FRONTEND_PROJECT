@@ -20,7 +20,7 @@ export default function SplashScreen() {
     }, exitStartMs);
 
     const navTimer = setTimeout(() => {
-      navigate("/signup", { replace: true });
+      navigate("/Login", { replace: true });
     }, totalMs);
 
     return () => {
