@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../config";
+import { API_URL } from "../../config"; 
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [passwordBorder, setPasswordBorder] = useState("#e0e0e0");
@@ -20,13 +16,11 @@ const Login = () => {
     setLoginError("");
     setPasswordBorder("#e0e0e0");
   };
-
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!formData.email || !formData.password) {
     setLoginError("Email and password are required");
-  
     return;
   }
 
@@ -44,21 +38,31 @@ const Login = () => {
     });
 
     const data = await response.json();
+    console.log("LOGIN RESPONSE:", data); // ✅ debug
 
     if (!response.ok) {
-      setLoginError(data.error || "Login failed");
+      setLoginError(data.error || data.message || "Login failed");
       setPasswordBorder("red");
       return;
     }
 
+    // ✅ save login
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
     setLoginError("");
     setLoginSuccess(true);
 
-    // Redirect after successful login
-    setTimeout(() => {
-      navigate("/dashboard"); // or wherever
-    }, 1000);
+    const role = (data?.user?.role || "").trim().toLowerCase();
+    console.log("ROLE:", role); // ✅ debug
 
+    // ✅ redirect (Instructor-first)
+    if (role === "instructor") {
+      navigate("/instructor/dashboard", { replace: true });
+      return;
+    }
+
+    setLoginError("You are not an Instructor");
   } catch (error) {
     setLoginError("Network error: " + error.message);
     setPasswordBorder("red");
@@ -89,20 +93,18 @@ const Login = () => {
           placeholder="Password"
         />
 
-        <button style={styles.button}>Login</button>
+        <button style={styles.button} type="submit">Login</button>
 
         {loginError && <p style={styles.errorText}>{loginError}</p>}
         {loginSuccess && <p style={styles.successText}>Successfully logged in</p>}
 
         <h3 style={{ textAlign: "center", fontSize: "14px" }}>
-          Don’t have an account? <Link to="/Signup">Sign Up</Link>
+          Don’t have an account? <Link to="/signup">Sign Up</Link>
         </h3>
       </form>
     </div>
   );
 };
-
-
 
 const styles = {
   container: {
@@ -113,7 +115,6 @@ const styles = {
     background: "#f0f2f5",
     padding: "20px",
   },
-
   form: {
     width: "380px",
     background: "#ffffff",
@@ -124,14 +125,7 @@ const styles = {
     flexDirection: "column",
     gap: "16px",
   },
-
-  title: {
-    textAlign: "center",
-    fontSize: "22px",
-    fontWeight: "600",
-    color: "#344767",
-  },
-
+  title: { textAlign: "center", fontSize: "22px", fontWeight: "600", color: "#344767" },
   input: {
     padding: "12px 14px",
     borderRadius: "8px",
@@ -140,7 +134,6 @@ const styles = {
     outline: "none",
     color: "#344767",
   },
-
   button: {
     marginTop: "10px",
     padding: "12px",
@@ -153,20 +146,8 @@ const styles = {
     cursor: "pointer",
     boxShadow: "0 8px 20px rgba(33,82,255,0.3)",
   },
-
-  errorText: {
-    color: "#f44335",
-    fontSize: "13px",
-    fontWeight: "500",
-    textAlign: "center",
-  },
-
-  successText: {
-    color: "#2e7d32",
-    fontSize: "14px",
-    fontWeight: "600",
-    textAlign: "center",
-  },
+  errorText: { color: "#f44335", fontSize: "13px", fontWeight: "500", textAlign: "center" },
+  successText: { color: "#2e7d32", fontSize: "14px", fontWeight: "600", textAlign: "center" },
 };
 
 export default Login;
