@@ -1,0 +1,177 @@
+.md2-dashboard {
+  padding: 20px;
+  background: #f8fafc;
+}
+
+/* Welcome + Stat Cards Row */
+.md2-header {
+  margin-bottom: 24px;
+}
+
+.md2-welcome {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.md2-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Reuse StatCard styling from before */
+.md2-stat-card {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transition: all 0.2s;
+}
+.md2-stat-card:hover { transform: translateY(-2px); }
+
+.md2-stat-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; font-size: 24px; }
+.md2-stat-icon.blue { background: #3b82f6; color: #fff; }
+.md2-stat-icon.green { background: #10b981; color: #fff; }
+.md2-stat-icon.sky { background: #0ea5e9; color: #fff; }
+.md2-stat-icon.pink { background: #ec4899; color: #fff; }
+
+.md2-stat-text { display: flex; flex-direction: column; }
+.md2-stat-label { font-size: 13px; color: #64748b; }
+.md2-stat-value { font-size: 18px; font-weight: 700; color: #0f172a; }
+
+/* Charts Section */
+.md2-charts-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.md2-chart-card {
+  flex: 1;
+  min-width: 240px;
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transition: all 0.2s;
+}
+.md2-chart-card:hover { transform: translateY(-2px); }
+.md2-chart-top { padding: 12px; display: flex; justify-content: center; background: #f1f5f9; }
+.md2-chart-body { padding: 12px 16px; }
+.md2-chart-title { font-weight: 700; font-size: 16px; color: #0f172a; }
+.md2-chart-sub { font-size: 13px; color: #64748b; }
+
+/* Courses Section */
+.md2-courses-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #0f172a; }
+.md2-course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.md2-course-card {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  transition: all 0.2s;
+}
+.md2-course-card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1); }
+.md2-course-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.md2-course-card p { font-size: 13px; color: #64748b; margin-bottom: 6px; }
+.md2-enroll-btn { padding: 8px 14px; border-radius: 14px; border: none; background: #3b82f6; color: #fff; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.md2-enroll-btn:hover { background: #2563eb; transform: translateY(-1px); }
+/* Modal Overlay */
+.md2-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Modal Card */
+.md2-modal {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+  animation: md2Pop 0.2s ease-out;
+}
+
+@keyframes md2Pop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.md2-modal-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.md2-modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.md2-modal p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 18px;
+}
+
+.md2-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.md2-btn-cancel {
+  padding: 8px 16px;
+  border-radius: 14px;
+  border: 1px solid #cbd5f5;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.md2-btn-confirm {
+  padding: 8px 16px;
+  border-radius: 14px;
+  border: none;
+  background: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.md2-btn-confirm:hover {
+  background: #2563eb;
+}
+.md2-enrolled-btn {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: not-allowed;
+  font-weight: 600;
+}

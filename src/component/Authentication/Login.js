@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../config"; 
 
-const Login = () => {
+const Login = ({token}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -61,8 +61,12 @@ const handleSubmit = async (e) => {
       navigate("/instructor/dashboard", { replace: true });
       return;
     }
+    else if(role === "student"){
+      navigate("/student/dashboard", { replace: true });
+      return;
+    }
 
-    setLoginError("You are not an Instructor");
+    setLoginError("You are not an Instructor/Student");
   } catch (error) {
     setLoginError("Network error: " + error.message);
     setPasswordBorder("red");

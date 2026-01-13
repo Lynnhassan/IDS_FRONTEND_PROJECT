@@ -18,8 +18,11 @@ import InstructorCourseNew from "./component/Instructor/InstructorCourseNew";
 import InstructorCourseEdit from "./component/Instructor/InstructorCourseEdit";
 import InstructorLessonNew from "./component/Instructor/InstructorLessonNew";
 import InstructorCourseView from "./component/Instructor/InstructorCourseView";
-
-
+import StudentReview from "./component/Student/StudentReview";
+import StudentDashboard from "./component/Student/StudentDashboard";
+import StudentLayout from "./component/Student/StudentLayout";
+import StudentEnrollment from "./component/Student/StudentEnrollment";
+import StudentLessons from "./component/Student/StudentLessons";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -32,7 +35,7 @@ root.render(
         <Route path="/signup" element={<SignUp />} />
 
         {/* Instructor protected */}
-        <Route element={<ProtectedRoute allowedRoles={["Instructor"]} />}>
+        {/* <Route element={<ProtectedRoute allowedRoles={["Instructor"]} />}>
           <Route element={<InstructorLayout />}>
             <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
             <Route path="/instructor/courses" element={<InstructorCourses />} />
@@ -43,7 +46,17 @@ root.render(
 
 
           </Route>
-        </Route>
+        </Route> */}
+
+         
+            <Route element={<StudentLayout />}>
+              <Route path="/student/dashboard" element={<StudentDashboard />} />
+              <Route path="/student/courses" element={<StudentEnrollment />} />
+              <Route path="/student/course/:courseId" element={<StudentLessons/>}></Route>
+              <Route path="/student/review/:courseId" element={<StudentReview />} />
+            </Route>
+          
+        
 
         {/* fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
