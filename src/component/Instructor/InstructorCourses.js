@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
 
 export default function InstructorCourses() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState("");
+
+  // ✅ added: search state
+  const [query, setQuery] = useState("");
 
   const loadCourses = async () => {
     setError("");
@@ -27,12 +30,36 @@ export default function InstructorCourses() {
     loadCourses();
   }, []);
 
-  const thumbSrc = (course) => {
-    // If you store full URL, use it. Otherwise adjust base URL for Laravel storage.
-    if (!course.thumbnail) return null;
-    if (String(course.thumbnail).startsWith("http")) return course.thumbnail;
-    return `http://127.0.0.1:8000/storage/${course.thumbnail}`; // change if your backend path differs
-  };
+const thumbSrc = (course) => {
+  const t = course?.thumbnail;
+  if (!t) return null;
+
+  const s = String(t);
+
+  // already a full URL
+  if (s.startsWith("http")) return s;
+
+  // if it already contains "storage/"
+  if (s.startsWith("storage/")) return `http://127.0.0.1:8000/${s}`;
+
+  // if it starts with "/storage/"
+  if (s.startsWith("/storage/")) return `http://127.0.0.1:8000${s}`;
+
+  // default: treat as path inside public storage
+  return `http://127.0.0.1:8000/storage/${s}`;
+};
+
+
+  // ✅ added: filtered list (keeps your original courses[] untouched)
+  const filteredCourses = useMemo(() => {
+    const q = String(query || "").toLowerCase().trim();
+    if (!q) return courses;
+
+    return courses.filter((c) => {
+      const hay = `${c.title ?? ""} ${c.shortDescription ?? ""} ${c.category ?? ""} ${c.difficulty ?? ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [courses, query]);
 
   return (
     <div style={page}>
@@ -47,6 +74,22 @@ export default function InstructorCourses() {
         </Link>
       </div>
 
+      {/* ✅ added: search bar (doesn't change your existing layout logic) */}
+      <div style={searchBar}>
+        <span style={{ opacity: 0.7 }}>🔎</span>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search courses..."
+          style={searchInput}
+        />
+        {query ? (
+          <button onClick={() => setQuery("")} style={clearBtn} title="Clear">
+            ✕
+          </button>
+        ) : null}
+      </div>
+
       {error && <div style={errorBox}>{error}</div>}
 
       {courses.length === 0 ? (
@@ -59,9 +102,22 @@ export default function InstructorCourses() {
             Create Course
           </Link>
         </div>
+      ) : filteredCourses.length === 0 ? (
+        <div style={emptyBox}>
+          <div style={{ fontWeight: 800, fontSize: 18 }}>No results</div>
+          <div style={{ opacity: 0.7, marginTop: 6 }}>
+            Try a different search term.
+          </div>
+          <button
+            onClick={() => setQuery("")}
+            style={{ ...primaryBtn, border: "none", cursor: "pointer", display: "inline-block", marginTop: 14 }}
+          >
+            Clear Search
+          </button>
+        </div>
       ) : (
         <div style={grid}>
-          {courses.map((course) => (
+          {filteredCourses.map((course) => (
             <div key={course.id} style={card}>
               <div style={thumbWrap}>
                 {thumbSrc(course) ? (
@@ -69,7 +125,11 @@ export default function InstructorCourses() {
                     src={thumbSrc(course)}
                     alt={course.title}
                     style={thumbImg}
-                    onError={(e) => (e.currentTarget.style.display = "none")}
+                   onError={(e) => {
+  console.log("IMAGE FAILED:", e.currentTarget.src);
+  e.currentTarget.style.display = "none";
+}}
+
                   />
                 ) : (
                   <div style={thumbFallback}>📚</div>
@@ -84,8 +144,6 @@ export default function InstructorCourses() {
                 <div style={titleRow}>
                   <div style={cardTitle}>{course.title}</div>
                 </div>
-
-                
 
                 <div style={cardDesc}>{course.shortDescription}</div>
 
@@ -215,4 +273,34 @@ const emptyBox = {
   background: "#fff",
   border: "1px solid rgba(15,23,42,0.08)",
   boxShadow: "0 18px 40px rgba(15,23,42,0.06)",
+};
+
+/* ✅ added: search bar styles */
+const searchBar = {
+  background: "#fff",
+  borderRadius: 14,
+  border: "1px solid rgba(15,23,42,0.10)",
+  boxShadow: "0 12px 24px rgba(15,23,42,0.04)",
+  padding: "10px 12px",
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+};
+
+const searchInput = {
+  border: "none",
+  outline: "none",
+  background: "transparent",
+  width: "100%",
+  fontWeight: 800,
+  color: "#0f172a",
+};
+
+const clearBtn = {
+  border: "none",
+  cursor: "pointer",
+  background: "rgba(15,23,42,0.06)",
+  borderRadius: 10,
+  padding: "6px 10px",
+  fontWeight: 900,
 };

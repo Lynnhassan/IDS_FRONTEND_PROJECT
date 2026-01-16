@@ -1,8 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./InstructorDashboard.css";
 import { API_URL } from "../../config";
+import { useNavigate } from "react-router-dom";
+
 
 export default function InstructorDashboard() {
+  const navigate = useNavigate();
+
   const [stats, setStats] = useState({ courses: 0, students: 0, lessons: 0 });
   const [charts, setCharts] = useState({
     labels7: ["M", "T", "W", "T", "F", "S", "S"],
@@ -52,7 +56,8 @@ export default function InstructorDashboard() {
           <div className="md2-search">
             <input placeholder="Search here" />
           </div>
-          <button className="md2-icon-btn" title="Profile">👤</button>
+         <button className="md2-icon-btn" title="Profile" onClick={() => navigate("/instructor/account")}>👤</button>
+
           <button className="md2-icon-btn" title="Settings">⚙️</button>
           <button className="md2-icon-btn" title="Notifications">🔔</button>
         </div>
