@@ -36,10 +36,10 @@ export default function InstructorDashboard() {
     };
 
     load();
-    // eslint-disable-next-line
+    
   }, []);
 
-  // Helpful for scaling charts
+  
   const maxCourses = useMemo(() => Math.max(...charts.courses7, 1), [charts.courses7]);
   const maxLessons = useMemo(() => Math.max(...charts.lessons7, 1), [charts.lessons7]);
   const maxCompletions = useMemo(() => Math.max(...charts.completions7, 1), [charts.completions7]);
@@ -69,7 +69,7 @@ export default function InstructorDashboard() {
         </div>
       )}
 
-      {/* Stat cards */}
+     
       <section className="md2-stats">
         <StatCard icon="📚" label="Courses" value={stats.courses} delta="" deltaText="total" color="blue" />
         <StatCard icon="🎓" label="Students" value={stats.students} delta="" deltaText="total" color="sky" />
@@ -77,7 +77,7 @@ export default function InstructorDashboard() {
         <StatCard icon="✅" label="Completions" value={charts.completions7.reduce((a,b)=>a+b,0)} delta="" deltaText="last 7 days" color="pink" />
       </section>
 
-      {/* Chart cards */}
+      
       <section className="md2-charts">
         <ChartCard title="Website Views" subtitle="Courses created (last 7 days)" footer="auto from DB" theme="blue">
           <BarMiniChart values={charts.courses7} labels={charts.labels7} maxValue={maxCourses} />
@@ -123,7 +123,6 @@ function ChartCard({ title, subtitle, footer, theme, children }) {
   );
 }
 
-/** Bar chart (7 values) */
 function BarMiniChart({ values, labels, maxValue }) {
   const safe = Array.isArray(values) ? values : [0, 0, 0, 0, 0, 0, 0];
   const labs = Array.isArray(labels) ? labels : ["M", "T", "W", "T", "F", "S", "S"];
@@ -151,12 +150,12 @@ function BarMiniChart({ values, labels, maxValue }) {
   );
 }
 
-/** Line chart (7 values) */
+
 function LineMiniChart({ values, labels, maxValue, variant }) {
   const safe = Array.isArray(values) ? values : [0, 0, 0, 0, 0, 0, 0];
   const labs = Array.isArray(labels) ? labels : ["M", "T", "W", "T", "F", "S", "S"];
 
-  // Map values to y positions (bigger value = higher point)
+
   const pts = safe.map((v) => {
     const normalized = v / maxValue;         // 0..1
     return 140 - normalized * 100;           // y range

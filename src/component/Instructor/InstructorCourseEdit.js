@@ -57,13 +57,13 @@ export default function InstructorCourseEdit() {
     setError("");
 
     try {
-      const needsMultipart = !!pdfFile || removePdf; // ✅ if uploading OR removing, use FormData
+      const needsMultipart = !!pdfFile || removePdf; 
 
       if (needsMultipart) {
         const body = new FormData();
         body.append("_method", "PUT");
 
-        // ✅ append fields (force isPublished to 1/0)
+       
         body.append("title", form.title ?? "");
         body.append("shortDescription", form.shortDescription ?? "");
         body.append("longDescription", form.longDescription ?? "");
@@ -72,10 +72,10 @@ export default function InstructorCourseEdit() {
         body.append("thumbnail", form.thumbnail ?? "");
         body.append("isPublished", form.isPublished ? "1" : "0");
 
-        // ✅ remove pdf flag
+       
         if (removePdf) body.append("remove_pdf", "1");
 
-        // ✅ new pdf file overrides old
+       
         if (pdfFile) body.append("pdf", pdfFile);
 
         const res = await fetch(`${API_URL}/instructor/courses/${courseId}`, {
@@ -95,7 +95,7 @@ export default function InstructorCourseEdit() {
 
         alert("Course updated ✅");
       } else {
-        // ✅ normal JSON PUT
+       
         const payload = {
           ...form,
           isPublished: form.isPublished ? 1 : 0, // ✅ send numeric
