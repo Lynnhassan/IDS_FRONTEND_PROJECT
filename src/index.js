@@ -5,10 +5,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
+
 import SplashScreen from "./component/Splash/SplashScreen";
 import Login from "./component/Authentication/Login";
 import SignUp from "./component/Authentication/SignUp";
-
+import InstructorQuizView from "./component/Instructor/InstructorQuizView";
 import ProtectedRoute from "./component/ProtectedRoute";
 
 import InstructorLayout from "./component/Instructor/InstructorLayout";
@@ -23,6 +24,11 @@ import StudentDashboard from "./component/Student/StudentDashboard";
 import StudentLayout from "./component/Student/StudentLayout";
 import StudentEnrollment from "./component/Student/StudentEnrollment";
 import StudentLessons from "./component/Student/StudentLessons";
+import InstructorQuizQuestions from "./component/Instructor/InstructorQuizQuestions";
+import InstructorQuizNew from "./component/Instructor/InstructorQuizNew";
+import InstructorAccount from "./component/Instructor/InstructorAccount";
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -35,18 +41,31 @@ root.render(
         <Route path="/signup" element={<SignUp />} />
 
         {/* Instructor protected */}
-        {/* <Route element={<ProtectedRoute allowedRoles={["Instructor"]} />}>
+         <Route element={<ProtectedRoute allowedRoles={["Instructor"]} />}>
           <Route element={<InstructorLayout />}>
             <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
+            <Route path="/instructor/account" element={<InstructorAccount />} />
+
             <Route path="/instructor/courses" element={<InstructorCourses />} />
+            
             <Route path="/instructor/courses/new" element={<InstructorCourseNew />} />
+            <Route path="/instructor/courses/:courseId/quizzes/:quizId/questions" element={<InstructorQuizQuestions />} />
+            <Route
+                  path="/instructor/courses/:courseId/quizzes/new"
+                  element={<InstructorQuizNew />}
+                />
+
+            
+<Route path="/instructor/courses/:courseId/quizzes/:quizId/view" element={<InstructorQuizView />} />
+
+
             <Route path="/instructor/courses/:courseId/edit" element={<InstructorCourseEdit />} />
             <Route path="/instructor/courses/:courseId/lessons/new" element={<InstructorLessonNew />} />
             <Route path="/instructor/courses/:courseId/view" element={<InstructorCourseView />} />
 
 
           </Route>
-        </Route> */}
+        </Route> 
 
          
             <Route element={<StudentLayout />}>

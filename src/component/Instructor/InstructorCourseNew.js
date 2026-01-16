@@ -12,6 +12,10 @@ export default function InstructorCourseNew() {
     difficulty: "Easy",
     thumbnail: "",
   });
+
+  // ✅ added: pdf file state
+  const [pdfFile, setPdfFile] = useState(null);
+
   const [error, setError] = useState("");
 
   const onChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -22,14 +26,25 @@ export default function InstructorCourseNew() {
 
     try {
       const token = localStorage.getItem("token");
+
+      // ✅ If PDF is attached -> send multipart/form-data
+      const hasPdf = !!pdfFile;
+
+      const body = hasPdf ? new FormData() : null;
+
+      if (hasPdf) {
+        Object.entries(form).forEach(([k, v]) => body.append(k, v ?? ""));
+        body.append("pdf", pdfFile); // ✅ field name "pdf" (change to what your backend expects)
+      }
+
       const res = await fetch(`${API_URL}/instructor/courses`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
+          ...(hasPdf ? {} : { "Content-Type": "application/json" }),
         },
-        body: JSON.stringify(form),
+        body: hasPdf ? body : JSON.stringify(form),
       });
 
       const data = await res.json();
@@ -56,9 +71,21 @@ export default function InstructorCourseNew() {
       <div style={card}>
         <form onSubmit={submit} style={{ display: "grid", gap: 10 }}>
           <input name="title" value={form.title} onChange={onChange} placeholder="Title" style={input} />
-          
-          <input name="shortDescription" value={form.shortDescription} onChange={onChange} placeholder="Short Description" style={input} />
-          <input name="longDescription" value={form.longDescription} onChange={onChange} placeholder="Long Description" style={input} />
+
+          <input
+            name="shortDescription"
+            value={form.shortDescription}
+            onChange={onChange}
+            placeholder="Short Description"
+            style={input}
+          />
+          <input
+            name="longDescription"
+            value={form.longDescription}
+            onChange={onChange}
+            placeholder="Long Description"
+            style={input}
+          />
           <input name="category" value={form.category} onChange={onChange} placeholder="Category" style={input} />
 
           <select name="difficulty" value={form.difficulty} onChange={onChange} style={input}>
@@ -68,13 +95,42 @@ export default function InstructorCourseNew() {
           </select>
 
           <input
-  name="thumbnail"
-  type="url"
-  value={form.thumbnail}
-  onChange={onChange}
-  placeholder="Thumbnail URL (optional)"
-  style={input}
-/>
+            name="thumbnail"
+            type="url"
+            value={form.thumbnail}
+            onChange={onChange}
+            placeholder="Thumbnail URL (optional)"
+            style={input}
+          />
+
+          {/* ✅ added: PDF upload */}
+          <div style={fileBox}>
+            <div style={{ display: "grid", gap: 4 }}>
+              <div style={{ fontWeight: 950, color: "#0f172a" }}>Course PDF (optional)</div>
+              <div style={{ fontSize: 12, color: "#64748b", fontWeight: 800 }}>
+                Upload a PDF file to attach to this course.
+              </div>
+            </div>
+
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
+              style={fileInput}
+            />
+
+            {pdfFile ? (
+              <div style={fileMeta}>
+                <span style={{ fontWeight: 900 }}>{pdfFile.name}</span>
+                <span style={{ color: "#64748b", fontSize: 12 }}>
+                  ({Math.ceil(pdfFile.size / 1024)} KB)
+                </span>
+                <button type="button" onClick={() => setPdfFile(null)} style={removeFileBtn}>
+                  Remove
+                </button>
+              </div>
+            ) : null}
+          </div>
 
           {/* Optional preview - only here, not between inputs randomly */}
           {form.thumbnail && (
@@ -129,7 +185,13 @@ const previewBox = {
   gap: 8,
 };
 
-const previewImg = { width: 260, height: 150, objectFit: "cover", borderRadius: 14, border: "1px solid rgba(15,23,42,0.08)" };
+const previewImg = {
+  width: 260,
+  height: 150,
+  objectFit: "cover",
+  borderRadius: 14,
+  border: "1px solid rgba(15,23,42,0.08)",
+};
 
 const primaryBtn = {
   padding: 12,
@@ -148,4 +210,38 @@ const errorBox = {
   border: "1px solid rgba(244,63,94,0.25)",
   color: "#be123c",
   fontWeight: 850,
+};
+
+/* ✅ added styles for file upload */
+const fileBox = {
+  padding: 12,
+  borderRadius: 14,
+  border: "1px solid rgba(15,23,42,0.10)",
+  background: "rgba(15,23,42,0.02)",
+  display: "grid",
+  gap: 10,
+};
+
+const fileInput = {
+  padding: 10,
+  borderRadius: 12,
+  border: "1px dashed rgba(15,23,42,0.20)",
+  background: "#fff",
+};
+
+const fileMeta = {
+  display: "flex",
+  gap: 10,
+  alignItems: "center",
+  flexWrap: "wrap",
+};
+
+const removeFileBtn = {
+  marginLeft: "auto",
+  padding: "8px 10px",
+  borderRadius: 10,
+  border: "1px solid rgba(15,23,42,0.12)",
+  background: "#fff",
+  cursor: "pointer",
+  fontWeight: 900,
 };
