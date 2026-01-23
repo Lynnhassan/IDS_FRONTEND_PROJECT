@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../../config';
 import { useParams } from 'react-router-dom';
-import { within } from '@testing-library/dom';
+
 
 const StudentReviews = () => {
   const [averageRating, setAverageRating] = useState(0);
@@ -424,7 +424,8 @@ const styles = {
     color: '#ef4444',
     fontSize: '13px',
     fontWeight: '600',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    
   },
 
   /* ---------- Empty State ---------- */
@@ -531,6 +532,7 @@ const styles = {
     border: '2px solid #e2e8f0',
     borderRadius: '10px',
     fontWeight: '600',
+    color:'#0f172a',
     cursor: 'pointer'
   }
 };

@@ -922,10 +922,22 @@ function CourseCard({ course }) {
 
   return (
     <div style={styles.courseCard}>
-      <div style={styles.courseHeader}>
+      {/* <div style={styles.courseHeader}>
         <div style={styles.courseThumbnail}>{course.thumbnail || '📚'}</div>
         {isCompleted && <div style={styles.completedBadge}>✓ Completed</div>}
-      </div>
+      </div> */}
+      <div style={styles.courseHeader}>
+      <div style={styles.courseThumbnail}>
+  <img
+    src={course.thumbnail || '/images/course-placeholder.png'}
+    alt={course.title}
+    style={styles.thumbnailImage}
+    
+  />
+  {isCompleted && <div style={styles.completedBadge}>✓ Completed</div>}
+   </div>
+</div>
+
 
       <div style={styles.courseBody}>
         <h3 style={styles.courseTitle}>{course.title || 'Untitled Course'}</h3>
@@ -1344,7 +1356,15 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'all 0.2s'
-  }
+  },thumbnailImage: {
+  width: '100%',
+  height: '150px',
+  objectFit: 'cover',
+  borderRadius: '14px',
+  background: '#fff',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+}
+
 };
 
 

@@ -151,6 +151,7 @@
   background: #fff;
   cursor: pointer;
   font-weight: 600;
+  color: rgba(0,0,0,0.9);
 }
 
 .md2-btn-confirm {

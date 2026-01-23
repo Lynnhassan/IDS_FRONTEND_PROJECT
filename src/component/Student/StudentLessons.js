@@ -11,7 +11,7 @@ const StudentLessons = () => {
   const [expandedLesson, setExpandedLesson] = useState(null);
   const [completedLessons, setCompletedLessons] = useState(new Set());
   const [notification, setNotification] = useState(null);
-
+const [quizId, setQuizId] = useState(null);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const StudentLessons = () => {
       setLoading(false);
       return;
     }
-
+fetchCourseQuiz(); 
     fetchLessons();
   }, [courseId, token]);
 
@@ -69,6 +69,30 @@ const StudentLessons = () => {
       setLoading(false);
     }
   };
+// ✅ ADD THIS FUNCTION
+  const fetchCourseQuiz = async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/student/course/${courseId}/quizzes`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      const data = await response.json();
+      
+      if (data.success && data.quizzes && data.quizzes.length > 0) {
+        // Get the first available quiz or filter for the main quiz
+        const availableQuiz = data.quizzes.find(q => q.can_attempt) || data.quizzes[0];
+        setQuizId(availableQuiz.id);
+      }
+    } catch (err) {
+      console.error('Error fetching quiz:', err);
+    }
+  };
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -106,10 +130,23 @@ const StudentLessons = () => {
     }
   };
 
-  const handleTakeQuiz = () => {
-    navigate(`/student/course/${courseId}/quiz`);
-  };
-
+// In StudentLessons.js
+const handleTakeQuiz = () => {
+  console.log('=== Take Quiz Clicked ===');
+  console.log('Quiz ID:', quizId);
+  console.log('Token:', localStorage.getItem('token') ? 'exists' : 'missing');
+  
+  if (!quizId) {
+    showNotification('No quiz available for this course', 'error');
+    return;
+  }
+  
+  // ✅ FIXED: Added /student prefix
+  const targetRoute = `/student/quiz/${quizId}/take`;
+  console.log('Navigating to:', targetRoute);
+  
+  navigate(targetRoute);
+};
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
@@ -157,7 +194,12 @@ const StudentLessons = () => {
           onClose={() => setNotification(null)}
         />
       )}
-
+ <button 
+          onClick={() => navigate('/student/dashboard')}
+          style={styles.backButton}
+        >
+          ← Back to Dashboard
+        </button>
       {/* Course Progress Header */}
       <div style={styles.progressCard}>
         <div style={styles.progressHeader}>
@@ -249,7 +291,7 @@ const StudentLessons = () => {
       </div>
 
       {/* BOTTOM QUIZ BUTTON */}
-      {isFullyCompleted && (
+      {/* {isFullyCompleted && (
         <div style={styles.bottomQuizSection}>
           <div style={styles.bottomQuizCard}>
             <div style={styles.bottomQuizContent}>
@@ -263,7 +305,7 @@ const StudentLessons = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
@@ -435,13 +477,15 @@ function getYoutubeEmbedUrl(url) {
 }
 
 const styles = {
-  container: {
-    padding: '24px',
-    maxWidth: '900px',
-    margin: '0 auto',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    position: 'relative'
-  },
+ container: {
+  padding: '24px',
+  width: '95%',
+  maxWidth: '100%',
+  margin: '0',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  position: 'relative'
+},
+
   // ✅ NOTIFICATION STYLES
   notificationContainer: {
     position: 'fixed',
@@ -577,7 +621,8 @@ const styles = {
     borderRadius: '18px',
     padding: '24px',
     marginBottom: '24px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+    width:'100%'
   },
   progressHeader: {
     display: 'flex',
@@ -619,7 +664,8 @@ const styles = {
     alignItems: 'center',
     gap: '20px',
     boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-    animation: 'slideIn 0.5s ease'
+    animation: 'slideIn 0.5s ease',
+    width:'100%'
   },
   congratsIcon: {
     fontSize: '48px',
@@ -871,7 +917,20 @@ const styles = {
   completedIcon: {
     marginRight: '8px',
     fontSize: '18px'
-  }
+  },backButton: {
+    padding: '10px 20px',
+    background: '#fff',
+    border: '2px solid #e2e8f0',
+    borderRadius: '10px',
+    color: '#0f172a',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    marginBottom:"15px",
+    marginLeft:"82%",
+    marginTop:"-35px"
+  },
 };
 
 // Add keyframes and animations

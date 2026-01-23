@@ -80,10 +80,10 @@ export default function StudentDashboard() {
       setSelectedCourseId(null);
       
       // ✅ Show success notification
-      alert('✅ Successfully enrolled in the course!');
+      // alert('✅ Successfully enrolled in the course!');
     } catch (error) {
       console.error("Enrollment failed:", error);
-      alert('❌ Failed to enroll. Please try again.');
+      // alert('❌ Failed to enroll. Please try again.');
     }
   };
 

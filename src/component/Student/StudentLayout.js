@@ -47,6 +47,14 @@ export default function StudentLayout() {
           >
             👤 Profile
           </NavLink>
+                <NavLink
+            to="/student/certificates"
+            className={({ isActive }) =>
+              `md2-nav-item ${isActive ? "active" : ""}`
+            }
+          >
+            📚 Certificates
+          </NavLink>
 {/* 
           <NavLink
             to="/student/quizzes"

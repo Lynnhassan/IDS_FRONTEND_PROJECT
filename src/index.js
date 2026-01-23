@@ -27,9 +27,26 @@ import StudentLessons from "./component/Student/StudentLessons";
 import InstructorQuizQuestions from "./component/Instructor/InstructorQuizQuestions";
 import InstructorQuizNew from "./component/Instructor/InstructorQuizNew";
 import InstructorAccount from "./component/Instructor/InstructorAccount";
-
+import StudentQuiz from "./component/Student/StudentQuiz";
+import StudentQuizPage from "./component/Student/StudentQuizPage";
+import StudentQuizResult from "./component/Student/StudentQuizResult";
+import StudentQuizHistory from "./component/Student/StudentQuizHistory";
+import StudentCertificateWrapper from './component/Student/StudentCertificateWrapper';
+import { useParams } from "react-router-dom";
+import StudentCertificates from "./component/Student/StudentCertificates";
+import StudentCertificateDetails from "./component/Student/StudentCertificateDetails";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const CertificateResultWrapper = () => {
+  const { courseId } = useParams();
+  return <StudentCertificates courseId={courseId} />;
+};
+
+const CertificateDetailWrapper = () => {
+  const { certificateId } = useParams();
+  return <StudentCertificateDetails certificateId={certificateId} />;
+};
+
 
 root.render(
   <React.StrictMode>
@@ -69,10 +86,19 @@ root.render(
 
          
             <Route element={<StudentLayout />}>
-              <Route path="/student/dashboard" element={<StudentDashboard />} />
-              <Route path="/student/courses" element={<StudentEnrollment />} />
-              <Route path="/student/course/:courseId" element={<StudentLessons/>}></Route>
-              <Route path="/student/review/:courseId" element={<StudentReview />} />
+            <Route path="/student/dashboard" element={<StudentDashboard />} />
+            <Route path="/student/courses" element={<StudentEnrollment />} />
+            <Route path="/student/course/:courseId" element={<StudentLessons/>}></Route>
+            <Route path="/student/review/:courseId" element={<StudentReview />} />
+            <Route path="/student/quiz/:quizId/take" element={<StudentQuizPage />} />
+            <Route path="/student/quiz/:quizId/history" element={<StudentQuizHistory />} />
+    {/* <Route path="/student/courses/:courseId/certificate"  element={<StudentCertificateWrapper />} /> */}
+          {/* <Route path="/student/verify" element={<StudentCertificateVerify />} />
+        <Route path="/student/verify/:verificationCode" element={<CertificateVerifyWrapper />} /> */}
+          {/* Certificate Routes */}
+          <Route path="/student/certificates" element={<StudentCertificates />} />
+          <Route path="/student/certificates/:certificateId" element={<CertificateDetailWrapper />} />
+          <Route path="/student/courses/:courseId/certificate" element={<CertificateResultWrapper />} />
             </Route>
           
         
