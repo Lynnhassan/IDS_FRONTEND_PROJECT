@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback,useParams } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+
 import './StudentQuizStyle.css';
 import { API_URL } from '../../config';
 

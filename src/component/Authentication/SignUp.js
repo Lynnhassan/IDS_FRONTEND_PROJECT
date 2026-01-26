@@ -179,7 +179,7 @@ setDatabaseError("");
         >
 <option value="Student">Student</option>
 <option value="Instructor">Instructor</option>
-<option value="SuperAdmin">Super Admin</option>
+
 
         </select>
 

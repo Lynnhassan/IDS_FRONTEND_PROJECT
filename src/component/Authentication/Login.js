@@ -56,17 +56,23 @@ const handleSubmit = async (e) => {
     const role = (data?.user?.role || "").trim().toLowerCase();
     console.log("ROLE:", role); // ✅ debug
 
-    // ✅ redirect (Instructor-first)
-    if (role === "instructor") {
-      navigate("/instructor/dashboard", { replace: true });
-      return;
-    }
-    else if(role === "student"){
-      navigate("/student/dashboard", { replace: true });
-      return;
-    }
+if (role === "superadmin") {
+  navigate("/admin/dashboard", { replace: true });
+  return;
+}
 
-    setLoginError("You are not an Instructor/Student");
+if (role === "instructor") {
+  navigate("/instructor/dashboard", { replace: true });
+  return;
+}
+
+if (role === "student") {
+  navigate("/student/dashboard", { replace: true });
+  return;
+}
+
+setLoginError("Unauthorized role");
+
   } catch (error) {
     setLoginError("Network error: " + error.message);
     setPasswordBorder("red");
