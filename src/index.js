@@ -42,6 +42,8 @@ import AdminSidebar from "./component/SuperAdmin/AdminSidebar";
 import AdminLayout from "./component/SuperAdmin/AdminLayout";
 import AdminUsers from "./component/SuperAdmin/AdminUsers";
 
+import InstructorQuizGenerator from "./component/Instructor/InstructorQuizGenerator";
+import StudentSummarizer from "./component/Student/StudentSummarizer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const CertificateResultWrapper = () => {
@@ -53,6 +55,16 @@ const CertificateDetailWrapper = () => {
   const { certificateId } = useParams();
   return <StudentCertificateDetails certificateId={certificateId} />;
 };
+
+function QuizBuilderWrapper() {
+  const { id } = useParams();
+  return <InstructorQuizGenerator courseId={id} />;
+}
+// Add this wrapper function with your other wrappers at the top
+function StudentSummarizerWrapper() {
+  const { courseId } = useParams();
+  return <StudentSummarizer courseId={courseId} />;
+}
 
 
 root.render(
@@ -100,7 +112,7 @@ root.render(
             <Route path="/instructor/courses/:courseId/lessons/new" element={<InstructorLessonNew />} />
             <Route path="/instructor/courses/:courseId/view" element={<InstructorCourseView />} />
 
-
+            <Route path="/instructor/courses/:id/quiz-builder" element={<QuizBuilderWrapper />} />
           </Route>
         </Route> 
 
@@ -119,6 +131,8 @@ root.render(
           <Route path="/student/certificates" element={<StudentCertificates />} />
           <Route path="/student/certificates/:certificateId" element={<CertificateDetailWrapper />} />
           <Route path="/student/courses/:courseId/certificate" element={<CertificateResultWrapper />} />
+
+<Route path="/student/courses/:courseId/summary" element={<StudentSummarizerWrapper />} />
             </Route>
           
         

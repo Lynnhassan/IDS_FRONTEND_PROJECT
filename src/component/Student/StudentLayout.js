@@ -39,21 +39,21 @@ export default function StudentLayout() {
           >
             📚 Enrolled Courses
           </NavLink>
-              <NavLink
+              {/* <NavLink
             to="/student/profile"
             className={({ isActive }) =>
               `md2-nav-item ${isActive ? "active" : ""}`
             }
           >
             👤 Profile
-          </NavLink>
+          </NavLink> */}
                 <NavLink
             to="/student/certificates"
             className={({ isActive }) =>
               `md2-nav-item ${isActive ? "active" : ""}`
             }
           >
-            📚 Certificates
+            📝 Certificates
           </NavLink>
 {/* 
           <NavLink
