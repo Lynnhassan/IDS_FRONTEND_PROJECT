@@ -30,6 +30,10 @@ fetchCourseQuiz();
     fetchLessons();
   }, [courseId, token]);
 
+const handleGoToSummary = () => {
+  navigate(`/student/courses/${courseId}/summary`);
+};
+
   const fetchLessons = async () => {
     try {
       setLoading(true);
@@ -194,12 +198,25 @@ const handleTakeQuiz = () => {
           onClose={() => setNotification(null)}
         />
       )}
- <button 
+
+        
+        <div style={styles.topActions}>
+  
+
+         <button 
+    onClick={handleGoToSummary}
+    style={styles.summaryButton}
+  >
+    🤖 AI Summary
+  </button>
+  <button 
           onClick={() => navigate('/student/dashboard')}
           style={styles.backButton}
         >
           ← Back to Dashboard
         </button>
+</div>
+
       {/* Course Progress Header */}
       <div style={styles.progressCard}>
         <div style={styles.progressHeader}>
@@ -917,19 +934,45 @@ const styles = {
   completedIcon: {
     marginRight: '8px',
     fontSize: '18px'
-  },backButton: {
-    padding: '10px 20px',
-    background: '#fff',
-    border: '2px solid #e2e8f0',
+  },
+
+ 
+  topActions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px',
+    gap: '16px',
+    flexWrap: 'wrap',
+  },
+  
+  backButton: {
+    padding: '12px 24px',
+    backgroundColor: '#6366f1',
+    color: 'white',
+    border: 'none',
     borderRadius: '10px',
-    color: '#0f172a',
-    fontSize: '14px',
-    fontWeight: '600',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-    marginBottom:"15px",
-    marginLeft:"82%",
-    marginTop:"-35px"
+    fontSize: '16px',
+    fontWeight: '600',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 2px 8px rgba(0 ,0.2, 0.2, 0.3)',
+  },
+  
+  summaryButton: {
+    padding: '12px 28px',
+    background: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    fontWeight: '600',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 12px rgba(167, 139, 250, 0.4)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
   },
 };
 
@@ -986,6 +1029,12 @@ styleSheet.textContent = `
     background: rgba(255, 255, 255, 0.3) !important;
     transform: scale(1.1);
   }
+    .summaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+}
+
+    
 `;
 document.head.appendChild(styleSheet);
 
