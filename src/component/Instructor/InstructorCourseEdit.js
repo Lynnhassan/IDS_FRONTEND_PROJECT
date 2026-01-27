@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
+
 
 export default function InstructorCourseEdit() {
   const { courseId } = useParams();
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
 
   const [form, setForm] = useState(null);
@@ -93,12 +96,13 @@ export default function InstructorCourseEdit() {
         setPdfFile(null);
         setRemovePdf(false);
 
-        alert("Course updated ✅");
+        navigate("/instructor/courses", { replace: true });
+
       } else {
        
         const payload = {
           ...form,
-          isPublished: form.isPublished ? 1 : 0, // ✅ send numeric
+          isPublished: form.isPublished ? 1 : 0, 
         };
 
         const res = await fetch(`${API_URL}/instructor/courses/${courseId}`, {
@@ -114,7 +118,8 @@ export default function InstructorCourseEdit() {
         const data = await res.json();
         if (!res.ok) throw new Error(formatLaravelErrors(data) || data.error || data.message || "Failed to update course");
 
-        alert("Course updated ✅");
+        navigate("/instructor/courses", { replace: true });
+
       }
     } catch (e2) {
       setError(e2.message);

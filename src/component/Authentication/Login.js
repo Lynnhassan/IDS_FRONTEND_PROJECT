@@ -1,14 +1,27 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_URL } from "../../config"; 
 
 const Login = ({token}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [passwordBorder, setPasswordBorder] = useState("#e0e0e0");
+
+ 
+  const [signupMsg, setSignupMsg] = useState("");
+
+  useEffect(() => {
+    const msg = location?.state?.signupSuccess;
+    if (msg) {
+      setSignupMsg(msg);
+      
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,7 +51,7 @@ const handleSubmit = async (e) => {
     });
 
     const data = await response.json();
-    console.log("LOGIN RESPONSE:", data); // ✅ debug
+    console.log("LOGIN RESPONSE:", data); 
 
     if (!response.ok) {
       setLoginError(data.error || data.message || "Login failed");
@@ -52,6 +65,7 @@ const handleSubmit = async (e) => {
 
     setLoginError("");
     setLoginSuccess(true);
+    setSignupMsg(""); // ✅ hide signup msg after login
 
     const role = (data?.user?.role || "").trim().toLowerCase();
     console.log("ROLE:", role); // ✅ debug
@@ -84,6 +98,9 @@ setLoginError("Unauthorized role");
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.title}>Login</h2>
+
+        {/* ✅ new: signup success message */}
+        {signupMsg && <p style={styles.successText}>{signupMsg} ✅ Please login.</p>}
 
         <input
           style={styles.input}
