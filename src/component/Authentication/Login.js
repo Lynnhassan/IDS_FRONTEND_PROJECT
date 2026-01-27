@@ -1,14 +1,27 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_URL } from "../../config"; 
 
 const Login = ({token}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [passwordBorder, setPasswordBorder] = useState("#e0e0e0");
+
+ 
+  const [signupMsg, setSignupMsg] = useState("");
+
+  useEffect(() => {
+    const msg = location?.state?.signupSuccess;
+    if (msg) {
+      setSignupMsg(msg);
+      
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,7 +51,7 @@ const handleSubmit = async (e) => {
     });
 
     const data = await response.json();
-    console.log("LOGIN RESPONSE:", data); // ✅ debug
+    console.log("LOGIN RESPONSE:", data); 
 
     if (!response.ok) {
       setLoginError(data.error || data.message || "Login failed");
@@ -52,21 +65,28 @@ const handleSubmit = async (e) => {
 
     setLoginError("");
     setLoginSuccess(true);
+    setSignupMsg(""); // ✅ hide signup msg after login
 
     const role = (data?.user?.role || "").trim().toLowerCase();
     console.log("ROLE:", role); // ✅ debug
 
-    // ✅ redirect (Instructor-first)
-    if (role === "instructor") {
-      navigate("/instructor/dashboard", { replace: true });
-      return;
-    }
-    else if(role === "student"){
-      navigate("/student/dashboard", { replace: true });
-      return;
-    }
+if (role === "superadmin") {
+  navigate("/admin/dashboard", { replace: true });
+  return;
+}
 
-    setLoginError("You are not an Instructor/Student");
+if (role === "instructor") {
+  navigate("/instructor/dashboard", { replace: true });
+  return;
+}
+
+if (role === "student") {
+  navigate("/student/dashboard", { replace: true });
+  return;
+}
+
+setLoginError("Unauthorized role");
+
   } catch (error) {
     setLoginError("Network error: " + error.message);
     setPasswordBorder("red");
@@ -78,6 +98,9 @@ const handleSubmit = async (e) => {
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.title}>Login</h2>
+
+        {/* ✅ new: signup success message */}
+        {signupMsg && <p style={styles.successText}>{signupMsg} ✅ Please login.</p>}
 
         <input
           style={styles.input}

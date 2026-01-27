@@ -2,11 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
 
+
 export default function InstructorCourses() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState("");
 
-  // ✅ added: search state
+  
   const [query, setQuery] = useState("");
 
   const loadCourses = async () => {
@@ -36,21 +37,21 @@ const thumbSrc = (course) => {
 
   const s = String(t);
 
-  // already a full URL
+  
   if (s.startsWith("http")) return s;
 
-  // if it already contains "storage/"
+
   if (s.startsWith("storage/")) return `http://127.0.0.1:8000/${s}`;
 
-  // if it starts with "/storage/"
+  
   if (s.startsWith("/storage/")) return `http://127.0.0.1:8000${s}`;
 
-  // default: treat as path inside public storage
+  
   return `http://127.0.0.1:8000/storage/${s}`;
 };
 
 
-  // ✅ added: filtered list (keeps your original courses[] untouched)
+  
   const filteredCourses = useMemo(() => {
     const q = String(query || "").toLowerCase().trim();
     if (!q) return courses;
@@ -74,7 +75,7 @@ const thumbSrc = (course) => {
         </Link>
       </div>
 
-      {/* ✅ added: search bar (doesn't change your existing layout logic) */}
+      
       <div style={searchBar}>
         <span style={{ opacity: 0.7 }}>🔎</span>
         <input
@@ -172,7 +173,7 @@ const thumbSrc = (course) => {
   );
 }
 
-/* styles */
+
 const page = { display: "grid", gap: 16 };
 const topRow = { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 };
 const crumb = { fontSize: 13, color: "#64748b" };
@@ -275,7 +276,6 @@ const emptyBox = {
   boxShadow: "0 18px 40px rgba(15,23,42,0.06)",
 };
 
-/* ✅ added: search bar styles */
 const searchBar = {
   background: "#fff",
   borderRadius: 14,

@@ -14,6 +14,7 @@ export default function InstructorLessonNew() {
     estimatedDuration: 10,
     order: 1,
   });
+const label = { display: "grid", gap: 6, fontWeight: 500 };
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -63,57 +64,81 @@ export default function InstructorLessonNew() {
       {success && <p style={{ color: "green" }}>{success}</p>}
 
       <form onSubmit={submit} style={{ display: "grid", gap: 10 }}>
-        <input
-          name="title"
-          value={form.title}
-          onChange={onChange}
-          placeholder="Lesson Title"
-          style={input}
-        />
+  <label style={label}>
 
-        <select name="contentType" value={form.contentType} onChange={onChange} style={input}>
-          <option value="Video">Video</option>
-          <option value="Article">Article</option>
-          <option value="Quiz">Quiz</option>
-        </select>
+    Lesson Title
+    <input
+      name="title"
+      value={form.title}
+      onChange={onChange}
+      placeholder="e.g. Introduction to React"
+      style={input}
+    />
+  </label>
 
-        {/* For now, always show videoUrl. Later we can hide it if contentType != Video */}
-        <input
-          name="videoUrl"
-          value={form.videoUrl}
-          onChange={onChange}
-          placeholder="Video URL / Content URL"
-          style={input}
-        />
+<label style={label}>
 
-        <input
-          name="estimatedDuration"
-          type="number"
-          value={form.estimatedDuration}
-          onChange={onChange}
-          placeholder="Estimated Duration (minutes)"
-          style={input}
-        />
+    Content Type
+    <select
+      name="contentType"
+      value={form.contentType}
+      onChange={onChange}
+      style={input}
+    >
+      <option value="Video">Video</option>
+      <option value="Article">Article</option>
+      <option value="Quiz">Quiz</option>
+    </select>
+  </label>
 
-        <input
-          name="order"
-          type="number"
-          value={form.order}
-          onChange={onChange}
-          placeholder="Order (1, 2, 3...)"
-          style={input}
-        />
+<label style={label}>
 
-        <button type="submit" style={btn}>Add Lesson</button>
+    Video / Content URL
+    <input
+      name="videoUrl"
+      value={form.videoUrl}
+      onChange={onChange}
+      placeholder="https://..."
+      style={input}
+    />
+  </label>
+<label style={label}>
 
-        <button
-          type="button"
-          onClick={() => navigate(`/instructor/courses`, { replace: true })}
-          style={{ ...btn, background: "#e5e7eb", color: "#111827" }}
-        >
-          Back to Courses
-        </button>
-      </form>
+    Estimated Duration (minutes)
+    <input
+      name="estimatedDuration"
+      type="number"
+      value={form.estimatedDuration}
+      onChange={onChange}
+      placeholder="e.g. 10"
+      style={input}
+    />
+  </label>
+
+  <label style={label}>
+
+    Lesson Order
+    <input
+      name="order"
+      type="number"
+      value={form.order}
+      onChange={onChange}
+      placeholder="1, 2, 3..."
+      style={input}
+    />
+  </label>
+
+  <button type="submit" style={btn}>Add Lesson</button>
+
+  <button
+    type="button"
+    onClick={() => navigate(`/instructor/courses`, { replace: true })}
+    style={{ ...btn, background: "#e5e7eb", color: "#111827" }}
+  >
+    Back to Courses
+  </button>
+</form>
+
     </div>
   );
 }

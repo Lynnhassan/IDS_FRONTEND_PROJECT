@@ -35,6 +35,13 @@ import StudentCertificateWrapper from './component/Student/StudentCertificateWra
 import { useParams } from "react-router-dom";
 import StudentCertificates from "./component/Student/StudentCertificates";
 import StudentCertificateDetails from "./component/Student/StudentCertificateDetails";
+import AdminDashboard from "./component/SuperAdmin/AdminDashboard";
+import AdminRoute from "./component/SuperAdmin/AdminRoute";
+import AdminCourses from "./component/SuperAdmin/AdminCourses";
+import AdminSidebar from "./component/SuperAdmin/AdminSidebar";
+import AdminLayout from "./component/SuperAdmin/AdminLayout";
+import AdminUsers from "./component/SuperAdmin/AdminUsers";
+
 import InstructorQuizGenerator from "./component/Instructor/InstructorQuizGenerator";
 import StudentSummarizer from "./component/Student/StudentSummarizer";
 
@@ -68,6 +75,19 @@ root.render(
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+
+
+        {/* ... your public routes (login, signup, etc) ... */}
+
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="courses" element={<AdminCourses />} />
+          </Route>
+        
+        </Route>
+
 
         {/* Instructor protected */}
          <Route element={<ProtectedRoute allowedRoles={["Instructor"]} />}>

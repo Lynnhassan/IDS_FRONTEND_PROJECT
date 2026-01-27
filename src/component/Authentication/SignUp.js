@@ -41,24 +41,6 @@ const handleChange = (e) => {
 
 
 
-// const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     if (formData.password !== formData.confirmPassword) {
-//       setWrongPassword(true);
-//       setWrongPasswordBorder("red");
-//       setMessageSuccessful(false);
-//       return;
-//     }
-//     setWrongPasswordBorder("#e0e0e0");
-// setWrongPassword(false)
-//     setMessageSuccessful(true);
-//     setTimeout(() => {
-//       setMessageSuccessful(false);
-//     }, 3000);
-
-//     console.log("Signup data:", formData);
-//   };
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -88,17 +70,12 @@ const handleSubmit = async (e) => {
 
 
 
-   /* if (!response.ok) {
-      setDatabaseError(Object.values(data.errors).flat().join("\n\n")); // ✅ show error
-    
-    }*/
-
       if (!response.ok) {
   const msg =
     data?.message ||
     (data?.errors ? Object.values(data.errors).flat().join("\n") : "Signup failed");
   setDatabaseError(msg);
-  return; // IMPORTANT: stop here
+  return; 
 }
 
 
@@ -108,9 +85,12 @@ setDatabaseError("");
     setWrongPasswordBorder("#e0e0e0");
     setMessageSuccessful(true);
     setTimeout(() => setMessageSuccessful(false), 3000);
-    
-    // redirect after signup if needed
-    // navigate("/login");
+
+    // ✅ redirect to login with success message
+    navigate("/Login", {
+      replace: true,
+      state: { signupSuccess: `Successfully registered as a ${formData.role}` },
+    });
 
   } catch (error) {
     console.error("Signup error:", error);
@@ -179,7 +159,7 @@ setDatabaseError("");
         >
 <option value="Student">Student</option>
 <option value="Instructor">Instructor</option>
-<option value="SuperAdmin">Super Admin</option>
+
 
         </select>
 
@@ -283,8 +263,5 @@ successText: {
 },
 
 };
-
-
-
 
 export default SignUp;
